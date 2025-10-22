@@ -1,37 +1,64 @@
-import { type User, type InsertUser } from "@shared/schema";
+import { type Document, type InsertDocument, type UpdateDocument } from "@shared/schema";
 import { randomUUID } from "crypto";
 
-// modify the interface with any CRUD methods
-// you might need
-
 export interface IStorage {
-  getUser(id: string): Promise<User | undefined>;
-  getUserByUsername(username: string): Promise<User | undefined>;
-  createUser(user: InsertUser): Promise<User>;
+  // Document operations
+  getAllDocuments(): Promise<Document[]>;
+  getDocument(id: string): Promise<Document | undefined>;
+  createDocument(document: InsertDocument): Promise<Document>;
+  updateDocument(id: string, updates: UpdateDocument): Promise<Document | undefined>;
+  deleteDocument(id: string): Promise<boolean>;
 }
 
 export class MemStorage implements IStorage {
-  private users: Map<string, User>;
+  private documents: Map<string, Document>;
 
   constructor() {
-    this.users = new Map();
+    this.documents = new Map();
   }
 
-  async getUser(id: string): Promise<User | undefined> {
-    return this.users.get(id);
-  }
-
-  async getUserByUsername(username: string): Promise<User | undefined> {
-    return Array.from(this.users.values()).find(
-      (user) => user.username === username,
+  async getAllDocuments(): Promise<Document[]> {
+    return Array.from(this.documents.values()).sort(
+      (a, b) => b.createdAt - a.createdAt
     );
   }
 
-  async createUser(insertUser: InsertUser): Promise<User> {
+  async getDocument(id: string): Promise<Document | undefined> {
+    return this.documents.get(id);
+  }
+
+  async createDocument(insertDocument: InsertDocument): Promise<Document> {
     const id = randomUUID();
-    const user: User = { ...insertUser, id };
-    this.users.set(id, user);
-    return user;
+    const now = Math.floor(Date.now() / 1000);
+    const document: Document = {
+      ...insertDocument,
+      id,
+      createdAt: now,
+      updatedAt: now,
+    };
+    this.documents.set(id, document);
+    return document;
+  }
+
+  async updateDocument(
+    id: string,
+    updates: UpdateDocument
+  ): Promise<Document | undefined> {
+    const document = this.documents.get(id);
+    if (!document) return undefined;
+
+    const now = Math.floor(Date.now() / 1000);
+    const updated: Document = {
+      ...document,
+      ...updates,
+      updatedAt: now,
+    };
+    this.documents.set(id, updated);
+    return updated;
+  }
+
+  async deleteDocument(id: string): Promise<boolean> {
+    return this.documents.delete(id);
   }
 }
 
