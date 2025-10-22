@@ -30,8 +30,16 @@ export class MemStorage implements IStorage {
   async createDocument(insertDocument: InsertDocument): Promise<Document> {
     const id = randomUUID();
     const now = Math.floor(Date.now() / 1000);
+    
+    // Normalize section order values on creation
+    const normalizedSections = insertDocument.sections.map((s, index) => ({
+      ...s,
+      order: index,
+    }));
+    
     const document: Document = {
       ...insertDocument,
+      sections: normalizedSections,
       id,
       createdAt: now,
       updatedAt: now,
@@ -48,9 +56,19 @@ export class MemStorage implements IStorage {
     if (!document) return undefined;
 
     const now = Math.floor(Date.now() / 1000);
+    
+    // Normalize section order values if sections are being updated
+    const normalizedUpdates = { ...updates };
+    if (normalizedUpdates.sections) {
+      normalizedUpdates.sections = normalizedUpdates.sections.map((s, index) => ({
+        ...s,
+        order: index,
+      }));
+    }
+    
     const updated: Document = {
       ...document,
-      ...updates,
+      ...normalizedUpdates,
       updatedAt: now,
     };
     this.documents.set(id, updated);

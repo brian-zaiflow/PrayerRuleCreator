@@ -31,7 +31,19 @@ export const insertDocumentSchema = createInsertSchema(documents, {
   updatedAt: true,
 });
 
-export const updateDocumentSchema = insertDocumentSchema.partial();
+export const updateDocumentSchema = z.object({
+  title: z.string().min(1, "Title is required").optional(),
+  sections: z.array(documentSectionSchema).optional(),
+}).refine(
+  (data) => {
+    // If sections are provided, validate all have order field
+    if (data.sections) {
+      return data.sections.every((s) => typeof s.order === 'number');
+    }
+    return true;
+  },
+  { message: "All sections must have valid order values" }
+);
 
 export type InsertDocument = z.infer<typeof insertDocumentSchema>;
 export type UpdateDocument = z.infer<typeof updateDocumentSchema>;

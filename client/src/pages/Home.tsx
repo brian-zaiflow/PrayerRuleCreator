@@ -13,7 +13,7 @@ export default function Home() {
   const [currentDocId, setCurrentDocId] = useState<string | null>(null);
 
   // Load existing document if available
-  const { data: documents } = useQuery({
+  const { data: documents, isLoading } = useQuery({
     queryKey: ['/api/documents'],
   });
 
@@ -64,6 +64,25 @@ export default function Home() {
   const handlePrint = () => {
     window.print();
   };
+
+  // Show loading state while fetching initial documents
+  if (isLoading) {
+    return (
+      <div className="h-screen flex flex-col bg-background">
+        <header className="border-b bg-card px-6 py-3 print:hidden">
+          <h1 className="text-lg font-serif font-medium text-foreground">
+            Document Creator
+          </h1>
+        </header>
+        <div className="flex-1 flex items-center justify-center">
+          <div className="text-center space-y-3">
+            <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto"></div>
+            <p className="text-sm text-muted-foreground">Loading document...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="h-screen flex flex-col bg-background">

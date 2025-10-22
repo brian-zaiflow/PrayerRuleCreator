@@ -54,7 +54,10 @@ export function DocumentEditor({
   };
 
   const deleteSection = (id: string) => {
-    onSectionsChange(sections.filter((s) => s.id !== id));
+    const filtered = sections.filter((s) => s.id !== id);
+    // Normalize order values after deletion
+    const normalized = filtered.map((s, index) => ({ ...s, order: index }));
+    onSectionsChange(normalized);
   };
 
   const handleDragStart = (e: React.DragEvent, id: string) => {
