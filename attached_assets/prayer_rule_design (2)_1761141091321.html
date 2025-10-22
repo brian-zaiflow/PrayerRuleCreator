@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Prayer Rule</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        @page {
+            size: letter;
+            margin: 0;
+        }
+
+        @media print {
+            body {
+                background: white;
+            }
+            .page {
+                page-break-after: always;
+                box-shadow: none;
+            }
+            .page:last-child {
+                page-break-after: auto;
+            }
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: #f5f5f0;
+            color: #2c2c2c;
+            line-height: 1.6;
+        }
+
+        .page {
+            width: 8.5in;
+            height: 11in;
+            margin: 20px auto;
+            background: white;
+            padding: 0.65in 0.75in;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 28px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #d4af37;
+        }
+
+        .header h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 36px;
+            font-weight: 300;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: #1a1a1a;
+            margin-bottom: 6px;
+        }
+
+        .header .subtitle {
+            font-size: 10px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #8b7355;
+            font-weight: 400;
+        }
+
+        .content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .section {
+            margin-bottom: 24px;
+        }
+
+        .section-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 17px;
+            font-weight: 500;
+            color: #1a1a1a;
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+        }
+
+        .section-content {
+            font-size: 12px;
+            color: #4a4a4a;
+            line-height: 1.6;
+            padding-left: 18px;
+        }
+
+        .prayer-item {
+            display: flex;
+            align-items: baseline;
+            margin-bottom: 5px;
+        }
+
+        .prayer-item:before {
+            content: "•";
+            color: #d4af37;
+            font-size: 14px;
+            margin-right: 10px;
+            flex-shrink: 0;
+        }
+
+        .divider {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .divider:after {
+            content: "✦";
+            color: #d4af37;
+            font-size: 12px;
+            opacity: 0.6;
+        }
+
+        .psalms-page .header {
+            margin-bottom: 30px;
+        }
+
+        .psalms-content {
+            flex: 1;
+        }
+
+        .psalm-entry {
+            margin-bottom: 14px;
+            display: flex;
+            font-size: 11px;
+            line-height: 1.6;
+        }
+
+        .psalm-condition {
+            flex: 0 0 280px;
+            color: #6b6b6b;
+            font-weight: 400;
+        }
+
+        .psalm-arrow {
+            color: #d4af37;
+            margin: 0 12px;
+            flex-shrink: 0;
+        }
+
+        .psalm-reference {
+            font-family: 'Cormorant Garamond', serif;
+            color: #1a1a1a;
+            font-weight: 500;
+            font-size: 13px;
+        }
+
+        .footer {
+            margin-top: auto;
+            padding-top: 15px;
+            border-top: 1px solid #e8e8e8;
+            text-align: center;
+            font-size: 9px;
+            color: #999;
+            letter-spacing: 1px;
+        }
+    </style>
+</head>
+<body>
+    <!-- PAGE 1: PRAYER RULE -->
+    <div class="page">
+        <div class="header">
+            <h1>Daily Prayer Rule</h1>
+        </div>
+
+        <div class="content">
+            <div class="section">
+                <div class="section-title">Typical Morning</div>
+                <div class="section-content">
+                    <div class="prayer-item">Usual Morning Prayers</div>
+                    <div class="prayer-item">Personal Supplications</div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">Typical Evening</div>
+                <div class="section-content">
+                    <div class="prayer-item">Usual Evening Prayers</div>
+                    <div class="prayer-item">Selected Psalm</div>
+                </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="section">
+                <div class="section-title">Wednesday Evening</div>
+                <div class="section-content">
+                    <div class="prayer-item">Usual Evening Prayers</div>
+                    <div class="prayer-item">Supplicatory Canon to the Theotokos</div>
+                </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="section">
+                <div class="section-title">Saturday Evening</div>
+                <div class="section-content">
+                    <div class="prayer-item">Usual Evening Prayers</div>
+                    <div class="prayer-item">Canon in Preparation for Communion</div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">Sunday Morning</div>
+                <div class="section-content">
+                    <div class="prayer-item">Prayers Before Communion</div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">Sunday Evening</div>
+                <div class="section-content">
+                    <div class="prayer-item">Prayers of Thanksgiving after Communion</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            ✦
+        </div>
+    </div>
+
+    <!-- PAGE 2: SELECTED PSALMS -->
+    <div class="page psalms-page">
+        <div class="header">
+            <h1>Selected Psalms</h1>
+            <div class="subtitle">For Various Circumstances</div>
+        </div>
+
+        <div class="psalms-content">
+            <div class="psalm-entry">
+                <div class="psalm-condition">When fearful or in need of comfort and protection</div>
+                <div class="psalm-arrow">→</div>
+                <div class="psalm-reference">Psalm 22</div>
+            </div>
+
+            <div class="psalm-entry">
+                <div class="psalm-condition">When brokenhearted, crushed in spirit, or delivered from fear</div>
+                <div class="psalm-arrow">→</div>
+                <div class="psalm-reference">Psalm 33</div>
+            </div>
+
+            <div class="psalm-entry">
+                <div class="psalm-condition">When overwhelmed by life's brevity or under God's discipline</div>
+                <div class="psalm-arrow">→</div>
+                <div class="psalm-reference">Psalm 38</div>
+            </div>
+
+            <div class="psalm-entry">
+                <div class="psalm-condition">When spiritually dry, cast down, or longing for God's presence</div>
+                <div class="psalm-arrow">→</div>
+                <div class="psalm-reference">Psalm 41</div>
+            </div>
+
+            <div class="psalm-entry">
+                <div class="psalm-condition">When seeking God's blessing and favor upon endeavors</div>
+                <div class="psalm-arrow">→</div>
+                <div class="psalm-reference">Psalm 66</div>
+            </div>
+
+            <div class="psalm-entry">
+                <div class="psalm-condition">When longing for the church or desiring God's dwelling place</div>
+                <div class="psalm-arrow">→</div>
+                <div class="psalm-reference">Psalm 83</div>
+            </div>
+
+            <div class="psalm-entry">
+                <div class="psalm-condition">When keeping vigil or offering brief nighttime prayer</div>
+                <div class="psalm-arrow">→</div>
+                <div class="psalm-reference">Psalm 133</div>
+            </div>
+
+            <div class="psalm-entry">
+                <div class="psalm-condition">When giving thanks for answered prayer and God's faithfulness</div>
+                <div class="psalm-arrow">→</div>
+                <div class="psalm-reference">Psalm 137</div>
+            </div>
+
+            <div class="psalm-entry">
+                <div class="psalm-condition">When joyful and desiring to praise God with all creation</div>
+                <div class="psalm-arrow">→</div>
+                <div class="psalm-reference">Psalm 148</div>
+            </div>
+        </div>
+
+        <div class="footer">
+            ✦
+        </div>
+    </div>
+</body>
+</html>
