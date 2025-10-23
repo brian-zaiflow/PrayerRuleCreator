@@ -29,7 +29,7 @@ export function DocumentPreview({ title, sections }: DocumentPreviewProps) {
         />
         
         <div 
-          className="bg-white shadow-lg print:shadow-none print:w-auto print:p-0 page-container"
+          className="bg-white shadow-lg print:shadow-none page-container"
           style={{
             width: '8.5in',
             padding: '0.6in 0.75in',
@@ -131,7 +131,7 @@ export function DocumentPreview({ title, sections }: DocumentPreviewProps) {
           }
           
           @media print {
-            /* Reset all container constraints for printing */
+            /* Preserve colors in print */
             * {
               -webkit-print-color-adjust: exact;
               print-color-adjust: exact;
@@ -141,7 +141,6 @@ export function DocumentPreview({ title, sections }: DocumentPreviewProps) {
               box-shadow: none !important;
               min-height: 0 !important;
               width: 100% !important;
-              padding: 0.6in 0.75in !important;
               position: static !important;
             }
             
@@ -150,10 +149,10 @@ export function DocumentPreview({ title, sections }: DocumentPreviewProps) {
               page-break-inside: avoid;
             }
             
-            /* Print-specific page settings */
+            /* Print-specific page settings with margins */
             @page {
               size: letter;
-              margin: 0;
+              margin: 0.6in 0.75in;
             }
             
             /* Remove any height/overflow constraints */
