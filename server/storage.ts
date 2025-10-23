@@ -1,5 +1,6 @@
-import { type Document, type InsertDocument, type UpdateDocument } from "@shared/schema";
-import { randomUUID } from "crypto";
+import { type Document, type InsertDocument, type UpdateDocument, documents } from "@shared/schema";
+import { db } from "./db";
+import { eq, desc, sql } from "drizzle-orm";
 
 export interface IStorage {
   // Document operations
@@ -10,41 +11,30 @@ export interface IStorage {
   deleteDocument(id: string): Promise<boolean>;
 }
 
-export class MemStorage implements IStorage {
-  private documents: Map<string, Document>;
-
-  constructor() {
-    this.documents = new Map();
-  }
-
+export class DatabaseStorage implements IStorage {
   async getAllDocuments(): Promise<Document[]> {
-    return Array.from(this.documents.values()).sort(
-      (a, b) => b.createdAt - a.createdAt
-    );
+    return await db.select().from(documents).orderBy(desc(documents.createdAt));
   }
 
   async getDocument(id: string): Promise<Document | undefined> {
-    return this.documents.get(id);
+    const [document] = await db.select().from(documents).where(eq(documents.id, id));
+    return document || undefined;
   }
 
   async createDocument(insertDocument: InsertDocument): Promise<Document> {
-    const id = randomUUID();
-    const now = Math.floor(Date.now() / 1000);
-    
     // Normalize section order values on creation
     const normalizedSections = insertDocument.sections.map((s, index) => ({
       ...s,
       order: index,
     }));
     
-    const document: Document = {
-      ...insertDocument,
-      sections: normalizedSections,
-      id,
-      createdAt: now,
-      updatedAt: now,
-    };
-    this.documents.set(id, document);
+    const [document] = await db
+      .insert(documents)
+      .values({
+        ...insertDocument,
+        sections: normalizedSections,
+      })
+      .returning();
     return document;
   }
 
@@ -52,11 +42,6 @@ export class MemStorage implements IStorage {
     id: string,
     updates: UpdateDocument
   ): Promise<Document | undefined> {
-    const document = this.documents.get(id);
-    if (!document) return undefined;
-
-    const now = Math.floor(Date.now() / 1000);
-    
     // Normalize section order values if sections are being updated
     const normalizedUpdates = { ...updates };
     if (normalizedUpdates.sections) {
@@ -66,18 +51,21 @@ export class MemStorage implements IStorage {
       }));
     }
     
-    const updated: Document = {
-      ...document,
-      ...normalizedUpdates,
-      updatedAt: now,
-    };
-    this.documents.set(id, updated);
-    return updated;
+    const [updated] = await db
+      .update(documents)
+      .set({
+        ...normalizedUpdates,
+        updatedAt: sql`extract(epoch from now())`,
+      })
+      .where(eq(documents.id, id))
+      .returning();
+    return updated || undefined;
   }
 
   async deleteDocument(id: string): Promise<boolean> {
-    return this.documents.delete(id);
+    const result = await db.delete(documents).where(eq(documents.id, id)).returning();
+    return result.length > 0;
   }
 }
 
-export const storage = new MemStorage();
+export const storage = new DatabaseStorage();

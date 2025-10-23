@@ -1,20 +1,28 @@
 import { useState, useEffect } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { type DocumentSection } from "@shared/schema";
+import { useRoute, useLocation } from "wouter";
+import { type DocumentSection, type Document } from "@shared/schema";
 import { DocumentEditor } from "@/components/DocumentEditor";
 import { DocumentPreview } from "@/components/DocumentPreview";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
+import { Button } from "@/components/ui/button";
+import { ArrowLeft } from "lucide-react";
 
 export default function Home() {
   const { toast } = useToast();
-  const [title, setTitle] = useState("Untitled Document");
+  const [, params] = useRoute("/edit/:id");
+  const [, setLocation] = useLocation();
+  const documentId = params?.id;
+  
+  const [title, setTitle] = useState("My Prayer Rule");
   const [sections, setSections] = useState<DocumentSection[]>([]);
-  const [currentDocId, setCurrentDocId] = useState<string | null>(null);
+  const [currentDocId, setCurrentDocId] = useState<string | null>(documentId || null);
 
-  // Load existing document if available
-  const { data: documents, isLoading } = useQuery({
-    queryKey: ['/api/documents'],
+  // Load existing document if editing
+  const { data: document, isLoading } = useQuery<Document>({
+    queryKey: ['/api/documents', documentId],
+    enabled: !!documentId,
   });
 
   // Save document mutation
@@ -51,15 +59,14 @@ export default function Home() {
     },
   });
 
-  // Load first document on mount
+  // Load document data when editing
   useEffect(() => {
-    if (documents && Array.isArray(documents) && documents.length > 0) {
-      const doc = documents[0];
-      setTitle(doc.title);
-      setSections(doc.sections);
-      setCurrentDocId(doc.id);
+    if (document) {
+      setTitle(document.title);
+      setSections(document.sections);
+      setCurrentDocId(document.id);
     }
-  }, [documents]);
+  }, [document]);
 
   const handlePrint = () => {
     window.print();
@@ -88,9 +95,19 @@ export default function Home() {
     <div className="h-screen flex flex-col bg-background print:h-auto print:block">
       {/* Top Bar */}
       <header className="border-b bg-card px-6 py-3 print:hidden">
-        <h1 className="text-lg font-serif font-medium text-foreground">
-          Document Creator
-        </h1>
+        <div className="flex items-center gap-3">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setLocation('/')}
+            data-testid="button-back"
+          >
+            <ArrowLeft className="w-5 h-5" />
+          </Button>
+          <h1 className="text-lg font-serif font-medium text-foreground">
+            {documentId ? 'Edit Prayer Rule' : 'Create Prayer Rule'}
+          </h1>
+        </div>
       </header>
 
       {/* Main Content */}
