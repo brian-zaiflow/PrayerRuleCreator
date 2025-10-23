@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { type DocumentSection } from "@shared/schema";
+import { type Prayer } from "@shared/prayerLibrary";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { SectionEditor } from "./SectionEditor";
-import { Plus, Divide, Printer, Save } from "lucide-react";
+import { PrayerBrowser } from "./PrayerBrowser";
+import { Plus, Divide, Printer, Save, BookOpen } from "lucide-react";
 import { Card } from "@/components/ui/card";
 
 interface DocumentEditorProps {
@@ -26,6 +28,7 @@ export function DocumentEditor({
   isSaving,
 }: DocumentEditorProps) {
   const [draggedId, setDraggedId] = useState<string | null>(null);
+  const [prayerBrowserOpen, setPrayerBrowserOpen] = useState(false);
 
   const addSection = () => {
     const newSection: DocumentSection = {
@@ -91,6 +94,17 @@ export function DocumentEditor({
     setDraggedId(null);
   };
 
+  const handleImportPrayer = (prayer: Prayer) => {
+    const newSection: DocumentSection = {
+      id: crypto.randomUUID(),
+      type: 'section',
+      title: prayer.title,
+      content: prayer.content,
+      order: sections.length,
+    };
+    onSectionsChange([...sections, newSection]);
+  };
+
   return (
     <div className="w-full h-full overflow-auto p-6 space-y-4">
       {/* Header */}
@@ -112,6 +126,16 @@ export function DocumentEditor({
             >
               <Plus className="w-4 h-4 mr-2" />
               Add Section
+            </Button>
+            <Button
+              onClick={() => setPrayerBrowserOpen(true)}
+              variant="default"
+              size="sm"
+              className="bg-primary hover:bg-primary"
+              data-testid="button-prayer-library"
+            >
+              <BookOpen className="w-4 h-4 mr-2" />
+              Prayer Library
             </Button>
             <Button
               onClick={addDivider}
@@ -146,6 +170,13 @@ export function DocumentEditor({
           </div>
         </div>
       </Card>
+
+      {/* Prayer Browser Dialog */}
+      <PrayerBrowser
+        open={prayerBrowserOpen}
+        onOpenChange={setPrayerBrowserOpen}
+        onImportPrayer={handleImportPrayer}
+      />
 
       {/* Sections */}
       <div className="space-y-3">

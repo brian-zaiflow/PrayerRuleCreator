@@ -1,15 +1,24 @@
-# Document Creator
+# Orthodox Prayer Rule Creator
 
-A beautiful web application for creating elegantly formatted documents optimized for printing on letter-size paper.
+A beautiful web application for creating elegantly formatted Orthodox prayer rules and custom prayer books, optimized for printing on letter-size paper.
 
 ## Overview
 
-This application provides a clean, distraction-free interface for creating professional documents with sophisticated typography inspired by classic prayer documents. Users can add sections with titles and content, insert decorative dividers, and preview their document in real-time before printing.
+This application provides a clean, distraction-free interface for creating professional prayer documents with sophisticated typography inspired by classic Orthodox prayer books. Users can manually add sections, import pre-configured Orthodox prayers from a comprehensive library, insert decorative dividers, and preview their document in real-time before printing.
 
 ## Features
 
 ### Core Functionality
 - **Document Editor**: Clean interface for adding and editing document content
+- **Orthodox Prayer Library**: Browse and import classic Orthodox prayers organized by category
+  - Morning Prayers (Trisagion, Morning Prayer)
+  - Evening Prayers (Evening Prayer, Prayer for Peaceful Sleep)
+  - Prayers for Life Events (Finding a Spouse, Before Journey, Before Meals)
+  - Prayers to the Theotokos (Hymn, Protection Prayer)
+  - Prayers to Saints (St. Nicholas, Guardian Angel)
+  - Psalms (Psalm 23, Psalm 51)
+  - General Prayers (Jesus Prayer, Thanksgiving, Prayer for Enemies)
+- **Prayer Search & Filter**: Search prayers by title, content, or tags; filter by category
 - **Section Management**: Add, edit, delete, and reorder sections via drag-and-drop
 - **Decorative Dividers**: Insert elegant gold dividers between sections
 - **Live Preview**: Real-time preview showing exactly how the document will print
@@ -35,7 +44,8 @@ This application provides a clean, distraction-free interface for creating profe
 
 ### Frontend (`client/`)
 - `src/pages/Home.tsx` - Main application page with split editor/preview layout
-- `src/components/DocumentEditor.tsx` - Left panel with document editing controls
+- `src/components/DocumentEditor.tsx` - Left panel with document editing controls and prayer library integration
+- `src/components/PrayerBrowser.tsx` - Modal dialog for browsing and importing Orthodox prayers
 - `src/components/SectionEditor.tsx` - Individual section editing component with drag-and-drop
 - `src/components/DocumentPreview.tsx` - Right panel showing formatted document preview
 
@@ -45,6 +55,7 @@ This application provides a clean, distraction-free interface for creating profe
 
 ### Shared (`shared/`)
 - `schema.ts` - TypeScript types and Zod schemas for documents and sections
+- `prayerLibrary.ts` - Comprehensive library of classic Orthodox prayers with categorization, search, and tagging
 
 ## Data Model
 
@@ -90,20 +101,38 @@ The application runs on port 5000 with:
 
 ## User Workflow
 
-1. **Create Document**: Enter a title and start adding sections
-2. **Add Content**: Use "Add Section" for text sections or "Add Divider" for decorative separators
-3. **Edit Sections**: Click into section title or content fields to edit
-4. **Reorder**: Drag sections by the grip handle to rearrange
-5. **Preview**: Live preview updates automatically on the right side
-6. **Save**: Click "Save" to persist changes
-7. **Print**: Click "Print" to open browser print dialog with optimized layout
+1. **Create Prayer Rule**: Enter a title for your prayer rule or custom prayer book
+2. **Add Content**: 
+   - Click "Prayer Library" to browse and import classic Orthodox prayers
+   - Use "Add Section" to manually create custom sections
+   - Use "Add Divider" for decorative separators
+3. **Browse Prayer Library**: 
+   - Filter prayers by category (Morning, Evening, Life Events, etc.)
+   - Search prayers by title, content, or tags
+   - Preview prayers before importing
+   - Click "Import" to add prayers to your document
+4. **Edit Sections**: Click into section title or content fields to customize
+5. **Reorder**: Drag sections by the grip handle to arrange your prayer rule
+6. **Preview**: Live preview updates automatically on the right side
+7. **Save**: Click "Save" to persist your prayer rule
+8. **Print**: Click "Print" to create a beautiful printed prayer book
 
 ## Recent Changes
 
-- Initial implementation with elegant design system
-- Added drag-and-drop section reordering
-- Implemented loading states for better UX
-- Added section order normalization after deletions
+### October 2025
+- **Orthodox Prayer Library**: Added comprehensive library of classic Orthodox prayers
+  - 15+ prayers organized by 7 categories
+  - Search and filter functionality
+  - Tag-based organization (daily, contemplative, intercession, etc.)
+  - Preview and import workflow
+- **Print Enhancements**: Fixed print preview to hide scrollbars and show only document content
+- **Schema Validation**: Strengthened order field validation to prevent data corruption
+- **Backend Normalization**: Automatic section order reindexing on all CRUD operations
+
+### Initial Release
+- Elegant design system with Cormorant Garamond and Montserrat fonts
+- Drag-and-drop section reordering
+- Loading states for better UX
 - Print-optimized layout with proper page breaks
 
 ## Design Philosophy
