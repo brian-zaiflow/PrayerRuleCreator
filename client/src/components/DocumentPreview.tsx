@@ -142,7 +142,7 @@ export function DocumentPreview({ title, sections }: DocumentPreviewProps) {
               min-height: 0 !important;
               width: 100% !important;
               position: static !important;
-              padding: 0.6in 0.75in !important;
+              padding: 0 !important;
             }
             
             /* Ensure content flows across pages */
