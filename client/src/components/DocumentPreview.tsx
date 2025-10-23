@@ -8,33 +8,13 @@ interface DocumentPreviewProps {
 export function DocumentPreview({ title, sections }: DocumentPreviewProps) {
   return (
     <div className="w-full h-full overflow-auto bg-background p-8 print:overflow-visible print:p-0 print:bg-white print:h-auto">
-      {/* Page container with repeating page break indicators */}
-      <div className="mx-auto print:mx-0 relative print:h-auto">
-        {/* Repeating page break indicator overlay - visible only on screen */}
-        <div 
-          className="print:hidden absolute left-0 right-0 top-0 pointer-events-none"
-          style={{
-            height: '100%',
-            minHeight: '11in',
-            backgroundImage: `repeating-linear-gradient(
-              to bottom,
-              transparent 0,
-              transparent calc(11in - 2px),
-              rgba(212, 175, 55, 0.25) calc(11in - 2px),
-              rgba(212, 175, 55, 0.25) 11in,
-              transparent 11in
-            )`,
-            zIndex: 10,
-          }}
-        />
-        
+      <div className="mx-auto print:mx-0 print:h-auto">
         <div 
           className="bg-white shadow-lg print:shadow-none page-container"
           style={{
             width: '8.5in',
             padding: '0.6in 0.75in',
             minHeight: '11in',
-            position: 'relative',
           }}
           data-testid="document-preview"
         >
