@@ -119,7 +119,7 @@ export default function Home() {
         @media print {
           @page {
             size: letter;
-            margin: 0.6in 0.75in;
+            margin: 0;
           }
           
           /* Ensure all containers can expand to show full content */
