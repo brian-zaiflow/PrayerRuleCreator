@@ -119,7 +119,16 @@ The application runs on port 5000 with:
 
 ## Recent Changes
 
-### October 2025
+### October 23, 2025
+- **Multi-Page Printing Fix**: Resolved critical issue where only first page printed
+  - Removed viewport height constraints (`h-screen`, `overflow-hidden`) in print mode
+  - Added comprehensive print styles to force all containers to expand (`height: auto`, `overflow: visible`)
+  - Ensured parent containers (Home.tsx) and preview component properly support multi-page flow
+  - Documents of any length now print completely across multiple pages
+  - Sections stay together with `page-break-inside: avoid`
+- **Print Optimization**: Letter-size (8.5" × 11") with proper margins (0.6in top/bottom, 0.75in sides)
+
+### Earlier October 2025
 - **Orthodox Prayer Library**: Added comprehensive library of classic Orthodox prayers
   - 15+ prayers organized by 7 categories
   - Search and filter functionality
