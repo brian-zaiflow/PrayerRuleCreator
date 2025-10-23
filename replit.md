@@ -116,6 +116,10 @@ The application runs on port 5000 with:
 6. **Preview**: Live preview updates automatically on the right side
 7. **Save**: Click "Save" to persist your prayer rule
 8. **Print**: Click "Print" to create a beautiful printed prayer book
+   - **For a clean aesthetic document**: Disable browser headers/footers in the print dialog
+     - Chrome/Edge: More settings → Uncheck "Headers and footers"
+     - Firefox: Page Setup → Set Headers & Footers to "--blank--"
+     - Safari: Uncheck "Print headers and footers"
 
 ## Recent Changes
 
