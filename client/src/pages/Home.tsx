@@ -85,7 +85,7 @@ export default function Home() {
   }
 
   return (
-    <div className="h-screen flex flex-col bg-background">
+    <div className="h-screen flex flex-col bg-background print:h-auto print:block">
       {/* Top Bar */}
       <header className="border-b bg-card px-6 py-3 print:hidden">
         <h1 className="text-lg font-serif font-medium text-foreground">
@@ -94,7 +94,7 @@ export default function Home() {
       </header>
 
       {/* Main Content */}
-      <div className="flex-1 flex overflow-hidden">
+      <div className="flex-1 flex overflow-hidden print:overflow-visible print:block print:h-auto">
         {/* Editor Panel */}
         <div className="w-1/2 border-r print:hidden">
           <DocumentEditor
@@ -109,7 +109,7 @@ export default function Home() {
         </div>
 
         {/* Preview Panel */}
-        <div className="w-1/2 print:w-full">
+        <div className="w-1/2 print:w-full print:h-auto">
           <DocumentPreview title={title} sections={sections} />
         </div>
       </div>
@@ -121,18 +121,37 @@ export default function Home() {
             size: letter;
             margin: 0;
           }
-          body {
-            background: white !important;
+          
+          /* Ensure all containers can expand to show full content */
+          * {
+            overflow: visible !important;
           }
+          
           html, body {
             overflow: visible !important;
             height: auto !important;
+            width: 100% !important;
+            background: white !important;
           }
+          
+          /* Remove all height constraints */
+          .print\\:h-auto,
+          .h-screen,
+          .h-full,
+          .flex-1 {
+            height: auto !important;
+            min-height: 0 !important;
+            max-height: none !important;
+          }
+          
           .print\\:hidden {
             display: none !important;
           }
           .print\\:w-full {
             width: 100% !important;
+          }
+          .print\\:block {
+            display: block !important;
           }
           .print\\:overflow-visible {
             overflow: visible !important;
@@ -143,6 +162,9 @@ export default function Home() {
           .print\\:mx-0 {
             margin-left: 0 !important;
             margin-right: 0 !important;
+          }
+          .print\\:bg-white {
+            background: white !important;
           }
         }
       `}</style>

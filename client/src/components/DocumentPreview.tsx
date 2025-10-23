@@ -7,9 +7,9 @@ interface DocumentPreviewProps {
 
 export function DocumentPreview({ title, sections }: DocumentPreviewProps) {
   return (
-    <div className="w-full h-full overflow-auto bg-background p-8 print:overflow-visible print:p-0 print:bg-white">
+    <div className="w-full h-full overflow-auto bg-background p-8 print:overflow-visible print:p-0 print:bg-white print:h-auto">
       {/* Page container with repeating page break indicators */}
-      <div className="mx-auto print:mx-0 relative">
+      <div className="mx-auto print:mx-0 relative print:h-auto">
         {/* Repeating page break indicator overlay - visible only on screen */}
         <div 
           className="print:hidden absolute left-0 right-0 top-0 pointer-events-none"
@@ -29,7 +29,7 @@ export function DocumentPreview({ title, sections }: DocumentPreviewProps) {
         />
         
         <div 
-          className="bg-white shadow-lg print:shadow-none page-container"
+          className="bg-white shadow-lg print:shadow-none print:w-auto print:p-0 page-container"
           style={{
             width: '8.5in',
             padding: '0.6in 0.75in',
@@ -131,15 +131,18 @@ export function DocumentPreview({ title, sections }: DocumentPreviewProps) {
           }
           
           @media print {
+            /* Reset all container constraints for printing */
+            * {
+              -webkit-print-color-adjust: exact;
+              print-color-adjust: exact;
+            }
+            
             .page-container {
               box-shadow: none !important;
               min-height: 0 !important;
-              page-break-after: auto;
-            }
-            
-            /* Remove spacing between pages in print */
-            .mx-auto {
-              margin: 0 !important;
+              width: 100% !important;
+              padding: 0.6in 0.75in !important;
+              position: static !important;
             }
             
             /* Ensure content flows across pages */
@@ -153,9 +156,10 @@ export function DocumentPreview({ title, sections }: DocumentPreviewProps) {
               margin: 0;
             }
             
+            /* Remove any height/overflow constraints */
             html, body {
-              width: 8.5in;
-              height: auto;
+              height: auto !important;
+              overflow: visible !important;
             }
           }
         `}</style>
