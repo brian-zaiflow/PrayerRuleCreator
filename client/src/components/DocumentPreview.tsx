@@ -40,7 +40,7 @@ export function DocumentPreview({ title, sections }: DocumentPreviewProps) {
         >
           {/* Document Header */}
           <div 
-            className="text-center mb-7 pb-4 border-b border-[#d4af37]"
+            className="text-center mb-7 pb-4 border-b border-[#d4af37] print-header"
             style={{ pageBreakAfter: 'avoid' }}
           >
             <h1 
@@ -57,7 +57,7 @@ export function DocumentPreview({ title, sections }: DocumentPreviewProps) {
           </div>
 
           {/* Document Content */}
-          <div className="flex flex-col">
+          <div className="flex flex-col print-content">
             {sections.length === 0 ? (
               <div className="text-center text-muted-foreground py-16">
                 <p className="font-sans text-sm">No sections yet. Add a section to begin.</p>
@@ -148,12 +148,6 @@ export function DocumentPreview({ title, sections }: DocumentPreviewProps) {
             /* Ensure content flows across pages */
             .section-content {
               page-break-inside: avoid;
-            }
-            
-            /* Print-specific page settings with margins */
-            @page {
-              size: letter;
-              margin: 0.6in 0.75in;
             }
             
             /* Remove any height/overflow constraints */
