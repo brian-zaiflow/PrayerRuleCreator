@@ -9,6 +9,10 @@ This application provides a clean, distraction-free interface for creating profe
 ## Features
 
 ### Core Functionality
+- **Document Management**: Browse, create, edit, and delete prayer documents
+  - Document list with thumbnail previews
+  - Creation date metadata for each document
+  - Persistent database storage (PostgreSQL)
 - **Document Editor**: Clean interface for adding and editing document content
 - **Orthodox Prayer Library**: Browse and import classic Orthodox prayers organized by category
   - Morning Prayers (Trisagion, Morning Prayer)
@@ -23,7 +27,6 @@ This application provides a clean, distraction-free interface for creating profe
 - **Decorative Dividers**: Insert elegant gold dividers between sections
 - **Live Preview**: Real-time preview showing exactly how the document will print
 - **Print Optimization**: Letter-size (8.5" × 11") layout with proper margins and page breaks
-- **Auto-save**: Documents are automatically saved to in-memory storage
 
 ### Design System
 - **Typography**: 
@@ -43,7 +46,8 @@ This application provides a clean, distraction-free interface for creating profe
 ## Project Structure
 
 ### Frontend (`client/`)
-- `src/pages/Home.tsx` - Main application page with split editor/preview layout
+- `src/pages/DocumentList.tsx` - Homepage showing all documents with thumbnails, creation dates, and action buttons
+- `src/pages/Home.tsx` - Document editor page with split editor/preview layout
 - `src/components/DocumentEditor.tsx` - Left panel with document editing controls and prayer library integration
 - `src/components/PrayerBrowser.tsx` - Modal dialog for browsing and importing Orthodox prayers
 - `src/components/SectionEditor.tsx` - Individual section editing component with drag-and-drop
@@ -51,7 +55,8 @@ This application provides a clean, distraction-free interface for creating profe
 
 ### Backend (`server/`)
 - `routes.ts` - RESTful API endpoints for document CRUD operations
-- `storage.ts` - In-memory storage implementation for documents
+- `storage.ts` - Database storage implementation with Drizzle ORM
+- `db.ts` - PostgreSQL database connection and Drizzle setup
 
 ### Shared (`shared/`)
 - `schema.ts` - TypeScript types and Zod schemas for documents and sections
@@ -93,29 +98,35 @@ The application runs on port 5000 with:
 - Vite dev server for frontend with HMR
 
 ### Technology Stack
-- **Frontend**: React, TypeScript, Tailwind CSS, TanStack Query
+- **Frontend**: React, TypeScript, Tailwind CSS, TanStack Query, Wouter (routing)
 - **Backend**: Express.js, Node.js
-- **Storage**: In-memory (MemStorage)
+- **Database**: PostgreSQL with Drizzle ORM
 - **Validation**: Zod
 - **UI Components**: shadcn/ui with Radix primitives
 
 ## User Workflow
 
-1. **Create Prayer Rule**: Enter a title for your prayer rule or custom prayer book
-2. **Add Content**: 
+1. **Browse Documents**: View all saved prayer rules on the homepage
+   - See thumbnail previews and creation dates
+   - Click "New Document" to create a new prayer rule
+   - Click "Edit" on any document to modify it
+   - Click the trash icon to delete (with confirmation)
+2. **Create Prayer Rule**: Click "New Document" and enter a title for your prayer rule or custom prayer book
+3. **Add Content**: 
    - Click "Prayer Library" to browse and import classic Orthodox prayers
    - Use "Add Section" to manually create custom sections
    - Use "Add Divider" for decorative separators
-3. **Browse Prayer Library**: 
+4. **Browse Prayer Library**: 
    - Filter prayers by category (Morning, Evening, Life Events, etc.)
    - Search prayers by title, content, or tags
    - Preview prayers before importing
    - Click "Import" to add prayers to your document
-4. **Edit Sections**: Click into section title or content fields to customize
-5. **Reorder**: Drag sections by the grip handle to arrange your prayer rule
-6. **Preview**: Live preview updates automatically on the right side
-7. **Save**: Click "Save" to persist your prayer rule
-8. **Print**: Click "Print" to create a beautiful printed prayer book
+5. **Edit Sections**: Click into section title or content fields to customize
+6. **Reorder**: Drag sections by the grip handle to arrange your prayer rule
+7. **Preview**: Live preview updates automatically on the right side
+8. **Save**: Click "Save" to persist your prayer rule to the database
+9. **Return to List**: Click the back arrow to return to the document list
+10. **Print**: Click "Print" to create a beautiful printed prayer book
    - **For a clean aesthetic document**: Disable browser headers/footers in the print dialog
      - Chrome/Edge: More settings → Uncheck "Headers and footers"
      - Firefox: Page Setup → Set Headers & Footers to "--blank--"
@@ -124,6 +135,12 @@ The application runs on port 5000 with:
 ## Recent Changes
 
 ### October 23, 2025
+- **Document Management System**: Added complete document browsing, editing, and deletion
+  - Document list homepage with thumbnail previews
+  - Creation date display on each document card
+  - Edit and delete functionality with confirmation dialogs
+  - Navigation between document list and editor
+  - PostgreSQL database with persistent storage (migrated from in-memory)
 - **Multi-Page Printing Fix**: Resolved critical issue where only first page printed
   - Removed viewport height constraints (`h-screen`, `overflow-hidden`) in print mode
   - Added comprehensive print styles to force all containers to expand (`height: auto`, `overflow: visible`)
