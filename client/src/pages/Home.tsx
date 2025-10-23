@@ -124,11 +124,25 @@ export default function Home() {
           body {
             background: white !important;
           }
+          html, body {
+            overflow: visible !important;
+            height: auto !important;
+          }
           .print\\:hidden {
             display: none !important;
           }
           .print\\:w-full {
             width: 100% !important;
+          }
+          .print\\:overflow-visible {
+            overflow: visible !important;
+          }
+          .print\\:p-0 {
+            padding: 0 !important;
+          }
+          .print\\:mx-0 {
+            margin-left: 0 !important;
+            margin-right: 0 !important;
           }
         }
       `}</style>

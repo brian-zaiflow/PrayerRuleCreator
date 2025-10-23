@@ -7,9 +7,9 @@ interface DocumentPreviewProps {
 
 export function DocumentPreview({ title, sections }: DocumentPreviewProps) {
   return (
-    <div className="w-full h-full overflow-auto bg-background p-8">
+    <div className="w-full h-full overflow-auto bg-background p-8 print:overflow-visible print:p-0">
       <div 
-        className="mx-auto bg-white shadow-lg print:shadow-none"
+        className="mx-auto bg-white shadow-lg print:shadow-none print:mx-0"
         style={{
           width: '8.5in',
           minHeight: '11in',
