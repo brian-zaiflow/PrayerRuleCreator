@@ -8,6 +8,7 @@ import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
+import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "@/components/ui/resizable";
 
 export default function Home() {
   const { toast } = useToast();
@@ -111,24 +112,29 @@ export default function Home() {
       </header>
 
       {/* Main Content */}
-      <div className="flex-1 flex overflow-hidden print:overflow-visible print:block print:h-auto">
-        {/* Editor Panel */}
-        <div className="w-1/2 border-r print:hidden">
-          <DocumentEditor
-            title={title}
-            sections={sections}
-            onTitleChange={setTitle}
-            onSectionsChange={setSections}
-            onSave={() => saveMutation.mutate()}
-            onPrint={handlePrint}
-            isSaving={saveMutation.isPending}
-          />
-        </div>
+      <div className="flex-1 overflow-hidden print:overflow-visible print:block print:h-auto">
+        <ResizablePanelGroup direction="horizontal" className="h-full print:h-auto">
+          {/* Editor Panel */}
+          <ResizablePanel defaultSize={50} minSize={30} maxSize={70} className="print:hidden">
+            <DocumentEditor
+              title={title}
+              sections={sections}
+              onTitleChange={setTitle}
+              onSectionsChange={setSections}
+              onSave={() => saveMutation.mutate()}
+              onPrint={handlePrint}
+              isSaving={saveMutation.isPending}
+            />
+          </ResizablePanel>
 
-        {/* Preview Panel */}
-        <div className="w-1/2 print:w-full print:h-auto">
-          <DocumentPreview title={title} sections={sections} />
-        </div>
+          {/* Resize Handle */}
+          <ResizableHandle className="print:hidden" withHandle />
+
+          {/* Preview Panel */}
+          <ResizablePanel defaultSize={50} minSize={30} maxSize={70} className="print:w-full print:h-auto">
+            <DocumentPreview title={title} sections={sections} />
+          </ResizablePanel>
+        </ResizablePanelGroup>
       </div>
 
       {/* Print Styles */}

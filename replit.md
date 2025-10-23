@@ -26,6 +26,7 @@ This application provides a clean, distraction-free interface for creating profe
 - **Section Management**: Add, edit, delete, and reorder sections via drag-and-drop
 - **Decorative Dividers**: Insert elegant gold dividers between sections
 - **Live Preview**: Real-time preview showing exactly how the document will print
+- **Resizable Panels**: Drag the divider to adjust editor/preview panel sizes (30-70% range)
 - **Print Optimization**: Letter-size (8.5" × 11") layout with proper margins and page breaks
 
 ### Design System
@@ -135,6 +136,10 @@ The application runs on port 5000 with:
 ## Recent Changes
 
 ### October 23, 2025
+- **Resizable Panels**: Added drag-to-resize between editor and preview panels
+  - Drag the divider handle to customize your workspace
+  - Panels resize from 30% to 70% on either side
+  - Visual handle appears on hover for easy discovery
 - **Document Management System**: Added complete document browsing, editing, and deletion
   - Document list homepage with thumbnail previews
   - Creation date display on each document card
