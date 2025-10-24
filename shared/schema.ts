@@ -5,6 +5,7 @@ import { z } from "zod";
 
 // Document section can be either a text section or a divider
 export const sectionTypeSchema = z.enum(["section", "divider"]);
+export const layoutTypeSchema = z.enum(["single", "double"]);
 
 export const documentSectionSchema = z.object({
   id: z.string(),
@@ -17,6 +18,7 @@ export const documentSectionSchema = z.object({
 export const documents = pgTable("documents", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   title: text("title").notNull(),
+  layout: text("layout").notNull().default("single").$type<z.infer<typeof layoutTypeSchema>>(),
   sections: jsonb("sections").notNull().$type<z.infer<typeof documentSectionSchema>[]>(),
   createdAt: integer("created_at").notNull().default(sql`extract(epoch from now())`),
   updatedAt: integer("updated_at").notNull().default(sql`extract(epoch from now())`),
@@ -24,6 +26,7 @@ export const documents = pgTable("documents", {
 
 export const insertDocumentSchema = createInsertSchema(documents, {
   title: z.string().min(1, "Title is required"),
+  layout: layoutTypeSchema,
   sections: z.array(documentSectionSchema),
 }).omit({
   id: true,
@@ -33,6 +36,7 @@ export const insertDocumentSchema = createInsertSchema(documents, {
 
 export const updateDocumentSchema = z.object({
   title: z.string().min(1, "Title is required").optional(),
+  layout: layoutTypeSchema.optional(),
   sections: z.array(documentSectionSchema).optional(),
 }).refine(
   (data) => {
@@ -50,3 +54,4 @@ export type UpdateDocument = z.infer<typeof updateDocumentSchema>;
 export type Document = typeof documents.$inferSelect;
 export type DocumentSection = z.infer<typeof documentSectionSchema>;
 export type SectionType = z.infer<typeof sectionTypeSchema>;
+export type LayoutType = z.infer<typeof layoutTypeSchema>;

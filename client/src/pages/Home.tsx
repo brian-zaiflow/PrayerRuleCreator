@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useRoute, useLocation } from "wouter";
-import { type DocumentSection, type Document } from "@shared/schema";
+import { type DocumentSection, type Document, type LayoutType } from "@shared/schema";
 import { DocumentEditor } from "@/components/DocumentEditor";
 import { DocumentPreview } from "@/components/DocumentPreview";
 import { apiRequest, queryClient } from "@/lib/queryClient";
@@ -17,6 +17,7 @@ export default function Home() {
   const documentId = params?.id;
   
   const [title, setTitle] = useState("My Prayer Rule");
+  const [layout, setLayout] = useState<LayoutType>("single");
   const [sections, setSections] = useState<DocumentSection[]>([]);
   const [currentDocId, setCurrentDocId] = useState<string | null>(documentId || null);
 
@@ -32,11 +33,13 @@ export default function Home() {
       if (currentDocId) {
         return apiRequest('PATCH', `/api/documents/${currentDocId}`, {
           title,
+          layout,
           sections,
         });
       } else {
         return apiRequest('POST', '/api/documents', {
           title,
+          layout,
           sections,
         });
       }
@@ -64,6 +67,7 @@ export default function Home() {
   useEffect(() => {
     if (document) {
       setTitle(document.title);
+      setLayout(document.layout || "single");
       setSections(document.sections);
       setCurrentDocId(document.id);
     }
@@ -118,8 +122,10 @@ export default function Home() {
           <ResizablePanel defaultSize={50} minSize={30} maxSize={70} className="print:hidden">
             <DocumentEditor
               title={title}
+              layout={layout}
               sections={sections}
               onTitleChange={setTitle}
+              onLayoutChange={setLayout}
               onSectionsChange={setSections}
               onSave={() => saveMutation.mutate()}
               onPrint={handlePrint}
@@ -132,7 +138,7 @@ export default function Home() {
 
           {/* Preview Panel */}
           <ResizablePanel defaultSize={50} minSize={30} maxSize={70} className="print:w-full print:h-auto">
-            <DocumentPreview title={title} sections={sections} />
+            <DocumentPreview title={title} layout={layout} sections={sections} />
           </ResizablePanel>
         </ResizablePanelGroup>
       </div>

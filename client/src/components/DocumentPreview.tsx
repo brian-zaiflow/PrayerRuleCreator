@@ -1,11 +1,12 @@
-import { type DocumentSection } from "@shared/schema";
+import { type DocumentSection, type LayoutType } from "@shared/schema";
 
 interface DocumentPreviewProps {
   title: string;
+  layout: LayoutType;
   sections: DocumentSection[];
 }
 
-export function DocumentPreview({ title, sections }: DocumentPreviewProps) {
+export function DocumentPreview({ title, layout, sections }: DocumentPreviewProps) {
   return (
     <div className="w-full h-full overflow-auto bg-background p-8 print:overflow-visible print:p-0 print:bg-white print:h-auto">
       <div className="mx-auto print:mx-0 print:h-auto">
@@ -37,7 +38,14 @@ export function DocumentPreview({ title, sections }: DocumentPreviewProps) {
           </div>
 
           {/* Document Content */}
-          <div className="flex flex-col print-content">
+          <div 
+            className="print-content"
+            style={layout === "double" ? {
+              columnCount: 2,
+              columnGap: '0.5in',
+              columnFill: 'auto',
+            } : {}}
+          >
             {sections.length === 0 ? (
               <div className="text-center text-muted-foreground py-16">
                 <p className="font-sans text-sm">No sections yet. Add a section to begin.</p>

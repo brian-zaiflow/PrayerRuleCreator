@@ -1,17 +1,19 @@
 import { useState } from "react";
-import { type DocumentSection } from "@shared/schema";
+import { type DocumentSection, type LayoutType } from "@shared/schema";
 import { type Prayer } from "@shared/prayerLibrary";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { SectionEditor } from "./SectionEditor";
 import { PrayerBrowser } from "./PrayerBrowser";
-import { Plus, Divide, Printer, Save, BookOpen } from "lucide-react";
+import { Plus, Divide, Printer, Save, BookOpen, Columns2, RectangleVertical } from "lucide-react";
 import { Card } from "@/components/ui/card";
 
 interface DocumentEditorProps {
   title: string;
+  layout: LayoutType;
   sections: DocumentSection[];
   onTitleChange: (title: string) => void;
+  onLayoutChange: (layout: LayoutType) => void;
   onSectionsChange: (sections: DocumentSection[]) => void;
   onSave: () => void;
   onPrint: () => void;
@@ -20,8 +22,10 @@ interface DocumentEditorProps {
 
 export function DocumentEditor({
   title,
+  layout,
   sections,
   onTitleChange,
+  onLayoutChange,
   onSectionsChange,
   onSave,
   onPrint,
@@ -146,27 +150,44 @@ export function DocumentEditor({
               <Divide className="w-4 h-4 mr-2" />
               Add Divider
             </Button>
-            <div className="ml-auto flex gap-2">
-              <Button
-                onClick={onSave}
-                variant="default"
-                size="sm"
-                disabled={isSaving}
-                data-testid="button-save"
-              >
-                <Save className="w-4 h-4 mr-2" />
-                {isSaving ? 'Saving...' : 'Save'}
-              </Button>
-              <Button
-                onClick={onPrint}
-                variant="outline"
-                size="sm"
-                data-testid="button-print"
-              >
-                <Printer className="w-4 h-4 mr-2" />
-                Print
-              </Button>
-            </div>
+            <div className="flex-1" />
+            <Button
+              onClick={() => onLayoutChange(layout === "single" ? "double" : "single")}
+              variant="outline"
+              size="sm"
+              data-testid="button-toggle-layout"
+            >
+              {layout === "single" ? (
+                <>
+                  <Columns2 className="w-4 h-4 mr-2" />
+                  Double Column
+                </>
+              ) : (
+                <>
+                  <RectangleVertical className="w-4 h-4 mr-2" />
+                  Single Column
+                </>
+              )}
+            </Button>
+            <Button
+              onClick={onSave}
+              variant="default"
+              size="sm"
+              disabled={isSaving}
+              data-testid="button-save"
+            >
+              <Save className="w-4 h-4 mr-2" />
+              {isSaving ? 'Saving...' : 'Save'}
+            </Button>
+            <Button
+              onClick={onPrint}
+              variant="outline"
+              size="sm"
+              data-testid="button-print"
+            >
+              <Printer className="w-4 h-4 mr-2" />
+              Print
+            </Button>
           </div>
         </div>
       </Card>
