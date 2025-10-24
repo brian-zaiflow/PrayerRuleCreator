@@ -43,7 +43,7 @@ export function DocumentPreview({ title, layout, sections }: DocumentPreviewProp
             style={layout === "double" ? {
               columnCount: 2,
               columnGap: '0.5in',
-              columnFill: 'auto',
+              columnFill: 'balance',
             } : {}}
           >
             {sections.length === 0 ? (
@@ -116,6 +116,11 @@ export function DocumentPreview({ title, layout, sections }: DocumentPreviewProp
             .page-container {
               box-shadow: 0 0 0.5in -0.25in rgba(0,0,0,0.2);
             }
+            
+            /* Column layout styling for preview */
+            .print-content {
+              width: 100%;
+            }
           }
           
           @media print {
@@ -133,9 +138,17 @@ export function DocumentPreview({ title, layout, sections }: DocumentPreviewProp
               padding: 0 !important;
             }
             
+            /* Column layout in print */
+            .print-content {
+              width: 100%;
+              column-fill: auto !important;
+            }
+            
             /* Ensure content flows across pages */
             .section-content {
               page-break-inside: avoid;
+              break-inside: avoid;
+              -webkit-column-break-inside: avoid;
             }
             
             /* Remove any height/overflow constraints */
