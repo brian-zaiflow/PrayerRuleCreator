@@ -25,6 +25,42 @@ npm start
 npm run db:push  # Push schema changes to database
 ```
 
+## Running with Docker
+
+The application can be run in Docker containers with a single command. This includes both the app and a PostgreSQL database.
+
+```bash
+# Start application and database
+docker compose up
+
+# Start in detached mode (background)
+docker compose up -d
+
+# View logs
+docker compose logs -f
+
+# Stop and remove containers
+docker compose down
+
+# Stop and remove containers + volumes (deletes database data)
+docker compose down -v
+
+# Rebuild containers after code changes
+docker compose up --build
+```
+
+The Docker setup includes:
+- **PostgreSQL 16** running on port 5432 with persistent data volume
+- **Application** running on port 3000 (mapped from internal port 5000)
+- Automatic database initialization with healthchecks
+- Environment variables pre-configured for local development
+
+After starting with `docker compose up`, access the application at `http://localhost:3000`.
+
+**Note**: Port 3000 is used externally because macOS Control Center occupies port 5000 by default.
+
+**Note**: When running with Docker, you don't need to set up a separate DATABASE_URL environment variable - it's configured automatically in `docker-compose.yml`.
+
 ## Architecture
 
 ### Monorepo Structure
