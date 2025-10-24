@@ -9,13 +9,14 @@ interface DocumentPreviewProps {
 export function DocumentPreview({ title, layout, sections }: DocumentPreviewProps) {
   return (
     <div className="w-full h-full overflow-auto bg-background p-8 print:overflow-visible print:p-0 print:bg-white print:h-auto">
-      <div className="mx-auto print:mx-0 print:h-auto">
+      <div className="mx-auto print:mx-0 print:h-auto space-y-6 print:space-y-0">
+        {/* First Page */}
         <div 
           className="bg-white shadow-lg print:shadow-none page-container"
           style={{
             width: '8.5in',
+            height: '11in',
             padding: '0.6in 0.75in',
-            minHeight: '11in',
           }}
           data-testid="document-preview"
         >
@@ -55,7 +56,7 @@ export function DocumentPreview({ title, layout, sections }: DocumentPreviewProp
                 <div 
                   key={section.id} 
                   data-testid={`preview-section-${section.id}`}
-                  style={{ pageBreakInside: 'avoid' }}
+                  style={{ pageBreakInside: 'avoid', breakInside: 'avoid' }}
                   className="section-content"
                 >
                   {section.type === 'divider' ? (
@@ -115,11 +116,20 @@ export function DocumentPreview({ title, layout, sections }: DocumentPreviewProp
           @media screen {
             .page-container {
               box-shadow: 0 0 0.5in -0.25in rgba(0,0,0,0.2);
+              overflow: visible;
             }
             
             /* Column layout styling for preview */
             .print-content {
               width: 100%;
+              overflow: visible;
+            }
+            
+            /* Section break prevention in preview */
+            .section-content {
+              break-inside: avoid;
+              -webkit-column-break-inside: avoid;
+              page-break-inside: avoid;
             }
           }
           
@@ -132,6 +142,7 @@ export function DocumentPreview({ title, layout, sections }: DocumentPreviewProp
             
             .page-container {
               box-shadow: none !important;
+              height: auto !important;
               min-height: 0 !important;
               width: 100% !important;
               position: static !important;
