@@ -1,3 +1,13 @@
+# Docker Compose configuration for Prayer Rule Creator
+#
+# This configuration includes both the application and PostgreSQL database.
+# By default, document persistence is ENABLED (save/load/delete features).
+#
+# To run in "create and print only" mode (no database):
+# 1. Set ENABLE_DOCUMENT_PERSISTENCE=false and VITE_ENABLE_DOCUMENT_PERSISTENCE=false
+# 2. Comment out the postgres service and depends_on section
+# 3. Remove or comment out DATABASE_URL
+
 services:
   postgres:
     image: postgres:16-alpine
@@ -22,7 +32,15 @@ services:
       dockerfile: Dockerfile
     container_name: prayer-rule-app
     environment:
+      # Feature flag: Document persistence
+      # Set to 'true' to enable save/load/delete features (requires database)
+      # Set to 'false' for "create and print only" mode (no database needed)
+      ENABLE_DOCUMENT_PERSISTENCE: "true"
+      VITE_ENABLE_DOCUMENT_PERSISTENCE: "true"
+
+      # Database connection (only required when persistence is enabled)
       DATABASE_URL: postgresql://prayerrule:prayerrule_dev_password@postgres:5432/prayerrule
+
       PORT: 5000
       NODE_ENV: production
     ports:

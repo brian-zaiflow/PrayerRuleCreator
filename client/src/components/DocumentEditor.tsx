@@ -18,6 +18,7 @@ interface DocumentEditorProps {
   onSave: () => void;
   onPrint: () => void;
   isSaving?: boolean;
+  enableSave?: boolean;
 }
 
 export function DocumentEditor({
@@ -30,6 +31,7 @@ export function DocumentEditor({
   onSave,
   onPrint,
   isSaving,
+  enableSave = true,
 }: DocumentEditorProps) {
   const [draggedId, setDraggedId] = useState<string | null>(null);
   const [prayerBrowserOpen, setPrayerBrowserOpen] = useState(false);
@@ -169,16 +171,18 @@ export function DocumentEditor({
                 </>
               )}
             </Button>
-            <Button
-              onClick={onSave}
-              variant="default"
-              size="sm"
-              disabled={isSaving}
-              data-testid="button-save"
-            >
-              <Save className="w-4 h-4 mr-2" />
-              {isSaving ? 'Saving...' : 'Save'}
-            </Button>
+            {enableSave && (
+              <Button
+                onClick={onSave}
+                variant="default"
+                size="sm"
+                disabled={isSaving}
+                data-testid="button-save"
+              >
+                <Save className="w-4 h-4 mr-2" />
+                {isSaving ? 'Saving...' : 'Save'}
+              </Button>
+            )}
             <Button
               onClick={onPrint}
               variant="outline"

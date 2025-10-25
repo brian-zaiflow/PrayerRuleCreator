@@ -6,6 +6,7 @@ import { DocumentEditor } from "@/components/DocumentEditor";
 import { DocumentPreview } from "@/components/DocumentPreview";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
+import { config } from "@/lib/config";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "@/components/ui/resizable";
@@ -21,10 +22,10 @@ export default function Home() {
   const [sections, setSections] = useState<DocumentSection[]>([]);
   const [currentDocId, setCurrentDocId] = useState<string | null>(documentId || null);
 
-  // Load existing document if editing
+  // Load existing document if editing (only when persistence is enabled)
   const { data: document, isLoading } = useQuery<Document>({
     queryKey: ['/api/documents', documentId],
-    enabled: !!documentId,
+    enabled: !!documentId && config.enableDocumentPersistence,
   });
 
   // Save document mutation
@@ -101,16 +102,18 @@ export default function Home() {
       {/* Top Bar */}
       <header className="border-b bg-card px-6 py-3 print:hidden">
         <div className="flex items-center gap-3">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => setLocation('/')}
-            data-testid="button-back"
-          >
-            <ArrowLeft className="w-5 h-5" />
-          </Button>
+          {config.enableDocumentPersistence && (
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setLocation('/')}
+              data-testid="button-back"
+            >
+              <ArrowLeft className="w-5 h-5" />
+            </Button>
+          )}
           <h1 className="text-lg font-serif font-medium text-foreground">
-            {documentId ? 'Edit Prayer Rule' : 'Create Prayer Rule'}
+            {documentId && config.enableDocumentPersistence ? 'Edit Prayer Rule' : 'Create Prayer Rule'}
           </h1>
         </div>
       </header>
@@ -130,6 +133,7 @@ export default function Home() {
               onSave={() => saveMutation.mutate()}
               onPrint={handlePrint}
               isSaving={saveMutation.isPending}
+              enableSave={config.enableDocumentPersistence}
             />
           </ResizablePanel>
 

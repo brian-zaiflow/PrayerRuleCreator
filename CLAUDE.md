@@ -27,7 +27,9 @@ npm run db:push  # Push schema changes to database
 
 ## Running with Docker
 
-The application can be run in Docker containers with a single command. This includes both the app and a PostgreSQL database.
+The application can be run in Docker containers with a single command.
+
+### Development Mode (with database)
 
 ```bash
 # Start application and database
@@ -49,17 +51,68 @@ docker compose down -v
 docker compose up --build
 ```
 
-The Docker setup includes:
+The default `docker-compose.yml` includes:
 - **PostgreSQL 16** running on port 5432 with persistent data volume
 - **Application** running on port 3000 (mapped from internal port 5000)
+- **Document persistence enabled** (save/load/delete features)
 - Automatic database initialization with healthchecks
 - Environment variables pre-configured for local development
 
-After starting with `docker compose up`, access the application at `http://localhost:3000`.
+### Production Mode (without database)
+
+For production deployments without database infrastructure:
+
+```bash
+# Start application only (no database)
+docker compose -f docker-compose.production.yml up -d
+
+# View logs
+docker compose -f docker-compose.production.yml logs -f
+
+# Stop and remove containers
+docker compose -f docker-compose.production.yml down
+```
+
+The production configuration (`docker-compose.production.yml`):
+- **Application only** - no database container
+- **Document persistence disabled** - "create and print only" mode
+- Smaller resource footprint
+- Simpler deployment
+
+After starting with either command, access the application at `http://localhost:3000`.
 
 **Note**: Port 3000 is used externally because macOS Control Center occupies port 5000 by default.
 
-**Note**: When running with Docker, you don't need to set up a separate DATABASE_URL environment variable - it's configured automatically in `docker-compose.yml`.
+## Feature Flags
+
+### Document Persistence
+
+The application supports two modes controlled by the `ENABLE_DOCUMENT_PERSISTENCE` feature flag:
+
+**1. Create and Print Only Mode (Default for Production)**
+- Set `ENABLE_DOCUMENT_PERSISTENCE=false` and `VITE_ENABLE_DOCUMENT_PERSISTENCE=false`
+- No database required
+- Users can create and print prayer rules but cannot save them
+- The DocumentList page and Save button are hidden
+- Perfect for production deployments without database infrastructure
+
+**2. Full Persistence Mode (Development)**
+- Set `ENABLE_DOCUMENT_PERSISTENCE=true` and `VITE_ENABLE_DOCUMENT_PERSISTENCE=true`
+- Requires `DATABASE_URL` to be set
+- Enables save/load/delete functionality
+- Shows DocumentList page with saved documents
+- Useful for development and testing
+
+To switch modes:
+- **In Docker**: Edit `docker-compose.yml` environment variables
+- **Local development**: Create a `.env` file based on `.env.example`
+- **Production deployment**: Set environment variables in your hosting platform
+
+When persistence is disabled:
+- Database routes are not registered (`/api/documents/*`)
+- Frontend shows only the editor page
+- Back button and Save button are hidden
+- No database connection is established
 
 ## Architecture
 
@@ -184,9 +237,13 @@ The preview component (`DocumentPreview.tsx`) has special print styles:
 - Hides scrollbars and editor panel in print mode
 
 ### Environment Variables
-- `DATABASE_URL`: PostgreSQL connection string (required)
+- `ENABLE_DOCUMENT_PERSISTENCE`: Enable save/load/delete features (default: `false`)
+- `VITE_ENABLE_DOCUMENT_PERSISTENCE`: Frontend feature flag (must match backend setting)
+- `DATABASE_URL`: PostgreSQL connection string (required only when `ENABLE_DOCUMENT_PERSISTENCE=true`)
 - `PORT`: Server port (defaults to 5000)
 - `NODE_ENV`: Set to "development" or "production"
+
+See `.env.example` for configuration examples.
 
 ## Common Development Scenarios
 
