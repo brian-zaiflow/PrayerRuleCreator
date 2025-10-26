@@ -4,7 +4,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Orthodox Prayer Rule Creator - A web application for creating elegantly formatted Orthodox prayer rules and custom prayer books, optimized for printing on letter-size paper. Users can manually add sections, import pre-configured Orthodox prayers from a comprehensive library, and preview documents in real-time before printing.
+Orthodox Prayer Rule Creator - A client-only Progressive Web App (PWA) for creating elegantly formatted Orthodox prayer rules and custom prayer books, optimized for printing on letter-size paper. Users can manually add sections, import pre-configured Orthodox prayers from a comprehensive library, and preview documents in real-time before printing.
+
+**This is a static web application** - no backend server, no database, no persistent storage. All data exists only in the current session.
 
 ## Development Commands
 
@@ -13,82 +15,69 @@ Orthodox Prayer Rule Creator - A web application for creating elegantly formatte
 npm run dev
 
 # TypeScript type checking
-npm check
+npm run check
 
-# Build for production (frontend + backend)
+# Build for production
 npm run build
 
-# Start production server
-npm start
-
-# Database operations
-npm run db:push  # Push schema changes to database
+# Preview production build locally
+npm run preview
 ```
 
-## Running with Docker
+## Deployment
 
-The application can be run in Docker containers with a single command. This includes both the app and a PostgreSQL database.
+This application is deployed to GitHub Pages automatically via GitHub Actions when pushing to the `main` branch.
+
+### GitHub Pages Setup
+
+1. Enable GitHub Pages in your repository settings
+2. Set the source to "GitHub Actions"
+3. Push to the main branch - the workflow in `.github/workflows/deploy.yml` will build and deploy automatically
+
+### Manual Deployment
 
 ```bash
-# Start application and database
-docker compose up
+# Build the app
+npm run build
 
-# Start in detached mode (background)
-docker compose up -d
-
-# View logs
-docker compose logs -f
-
-# Stop and remove containers
-docker compose down
-
-# Stop and remove containers + volumes (deletes database data)
-docker compose down -v
-
-# Rebuild containers after code changes
-docker compose up --build
+# The dist/ folder contains the production build
+# Deploy the contents of dist/ to any static hosting service
 ```
-
-The Docker setup includes:
-- **PostgreSQL 16** running on port 5432 with persistent data volume
-- **Application** running on port 3000 (mapped from internal port 5000)
-- Automatic database initialization with healthchecks
-- Environment variables pre-configured for local development
-
-After starting with `docker compose up`, access the application at `http://localhost:3000`.
-
-**Note**: Port 3000 is used externally because macOS Control Center occupies port 5000 by default.
-
-**Note**: When running with Docker, you don't need to set up a separate DATABASE_URL environment variable - it's configured automatically in `docker-compose.yml`.
 
 ## Architecture
 
-### Monorepo Structure
+### Client-Only Structure
 
-This is a full-stack TypeScript application with three main directories:
+This is a single-page React application built with Vite:
 
-- **client/**: React frontend with Vite
-- **server/**: Express.js backend API
-- **shared/**: Shared TypeScript types, schemas, and data (used by both client and server)
+- **client/**: React frontend application
+  - **src/components/**: React components
+  - **src/pages/**: Page components (just Home)
+  - **src/lib/**: Utilities and prayer library data
+  - **src/types/**: TypeScript type definitions
+  - **public/**: Static assets (manifest, favicon)
 
 ### Key Architectural Patterns
 
-1. **Single Port Architecture**: Both frontend and backend run on port 5000 (configured via PORT env var)
-   - In development: Vite dev server proxies API requests to Express
-   - In production: Express serves built frontend assets
-   - All API routes are prefixed with `/api`
+1. **Progressive Web App**:
+   - Service worker for offline capability (via vite-plugin-pwa)
+   - Web app manifest for installability
+   - Caches Google Fonts and app assets
 
-2. **Type-Safe Validation Flow**: Zod schemas in `shared/schema.ts` define the shape of data
-   - Schemas generate TypeScript types via inference
-   - Backend validates requests using these schemas before database operations
-   - Frontend uses same types for type safety
+2. **No Persistence**:
+   - All document state is stored in React component state
+   - No localStorage, no database, no server
+   - Data is lost on page refresh - this is intentional
+   - Users are expected to print or save PDFs of their prayer rules
 
-3. **Database Access Pattern**: Drizzle ORM with repository pattern
-   - Database connection in `server/db.ts` (PostgreSQL via Neon)
-   - Storage interface and implementation in `server/storage.ts`
-   - Schema definitions in `shared/schema.ts` using Drizzle and Zod
+3. **Type Safety**:
+   - Zod schemas in `client/src/types/schema.ts` for runtime validation
+   - TypeScript types inferred from Zod schemas
 
-4. **Data Normalization**: Section order values are automatically normalized (reindexed 0, 1, 2...) on all CRUD operations in `storage.ts` to prevent data corruption
+4. **Print Optimization**:
+   - Preview panel shows exactly what will print
+   - Custom CSS for print media
+   - Letter-size (8.5" × 11") format with proper margins
 
 ## Data Model
 
@@ -96,34 +85,25 @@ This is a full-stack TypeScript application with three main directories:
 Documents contain sections that can be either text sections or decorative dividers:
 
 ```typescript
-Document {
-  id: string (UUID)
-  title: string
-  layout: "single" | "double"  // Column layout
-  sections: DocumentSection[]
-  createdAt: number (Unix timestamp)
-  updatedAt: number (Unix timestamp)
-}
-
 DocumentSection {
-  id: string
+  id: string (UUID)
   type: "section" | "divider"
   title?: string      // Only for type="section"
   content?: string    // Only for type="section"
-  order: number       // Position in document (auto-normalized)
+  order: number       // Position in document
 }
+
+Layout: "single" | "double"  // Column layout
 ```
 
 ### Prayer Library
-The prayer library (`shared/prayerLibrary.ts`) contains a curated collection of Orthodox prayers organized by category (Morning Prayers, Evening Prayers, Prayers for Life Events, Prayers to the Theotokos, Prayers to Saints, Psalms, General Prayers). Each prayer has a title, content, category, and tags for searching.
+The prayer library (`client/src/lib/prayerLibrary.ts`) contains a curated collection of Orthodox prayers organized by category (Morning Prayers, Evening Prayers, Prayers for Life Events, Prayers to the Theotokos, Prayers to Saints, Psalms, General Prayers). Each prayer has a title, content, category, and tags for searching.
 
 ## Frontend Architecture
 
 ### Component Hierarchy
 ```
-App (routing with wouter)
-├── DocumentList (homepage)
-│   └── Shows all documents with previews
+App (no routing needed)
 └── Home (editor page)
     ├── DocumentEditor (left panel)
     │   ├── Section controls and prayer library button
@@ -134,9 +114,9 @@ App (routing with wouter)
 ```
 
 ### State Management
-- **TanStack Query** for server state (documents CRUD)
-- **React local state** for UI state (editing, drag-and-drop)
-- Query invalidation triggers re-fetches after mutations
+- **React local state** for all application state
+- **No persistence** - state resets on page refresh
+- Document title, layout, and sections stored in Home component
 
 ### Styling
 - **Tailwind CSS** with custom design system
@@ -144,34 +124,13 @@ App (routing with wouter)
 - Print-optimized styles with `@media print` for clean output
 - Resizable panels using `react-resizable-panels`
 
-## Backend Architecture
-
-### API Endpoints (server/routes.ts)
-- `GET /api/documents` - List all documents (ordered by creation date, descending)
-- `GET /api/documents/:id` - Get single document
-- `POST /api/documents` - Create document (validates with `insertDocumentSchema`)
-- `PATCH /api/documents/:id` - Update document (validates with `updateDocumentSchema`)
-- `DELETE /api/documents/:id` - Delete document
-
-### Request Flow
-1. Express receives request
-2. Route handler validates input with Zod schema
-3. Storage layer performs database operation via Drizzle
-4. Response sent with proper status code and data/error
-
-### Database
-- PostgreSQL database accessed via Neon serverless
-- Connection string in `DATABASE_URL` environment variable
-- Drizzle ORM for type-safe queries
-- WebSocket constructor configured for Neon compatibility
-
 ## Important Patterns & Conventions
 
 ### Section Order Management
-Always use the storage layer methods which automatically normalize order values. Never manually manipulate order fields without reindexing all sections sequentially from 0.
+Sections maintain an `order` field that determines their position. When reordering via drag-and-drop or deleting sections, order values are normalized (0, 1, 2, ...).
 
 ### Adding New Prayers
-To add prayers to the library, edit `shared/prayerLibrary.ts`:
+To add prayers to the library, edit `client/src/lib/prayerLibrary.ts`:
 1. Add prayer object to `prayerLibrary` array
 2. Use existing categories or add to `prayerCategories` const
 3. Include appropriate tags for searchability
@@ -183,26 +142,25 @@ The preview component (`DocumentPreview.tsx`) has special print styles:
 - Letter-size (8.5" × 11") with 0.75in horizontal and 0.6in vertical margins
 - Hides scrollbars and editor panel in print mode
 
-### Environment Variables
-- `DATABASE_URL`: PostgreSQL connection string (required)
-- `PORT`: Server port (defaults to 5000)
-- `NODE_ENV`: Set to "development" or "production"
-
 ## Common Development Scenarios
 
-### Adding a New API Endpoint
-1. Add route handler in `server/routes.ts`
-2. Create/update Zod schemas in `shared/schema.ts` if needed
-3. Add storage method in `server/storage.ts`
-4. Use TanStack Query in frontend components to consume the endpoint
+### Adding New Prayer Categories
+1. Update `prayerCategories` array in `client/src/lib/prayerLibrary.ts`
+2. Add prayers with the new category
 
-### Modifying Database Schema
-1. Update schema in `shared/schema.ts` (both Drizzle and Zod schemas)
-2. Run `npm run db:push` to push changes to database
-3. Update TypeScript types will auto-generate from schema
+### Modifying Document Schema
+1. Update Zod schemas in `client/src/types/schema.ts`
+2. TypeScript types will auto-update via inference
+3. Update components to handle new fields
 
-### Adding New Document Sections
-The section system is flexible - sections can be either content sections (with title/content) or dividers (decorative separators). To add new section types, update the `sectionTypeSchema` in `shared/schema.ts`.
+### Adding New Section Types
+The section system is flexible - sections can be either content sections (with title/content) or dividers (decorative separators). To add new section types, update the `sectionTypeSchema` in `client/src/types/schema.ts`.
+
+### PWA Configuration
+To modify PWA settings, edit `vite.config.ts`:
+- Update manifest properties
+- Configure service worker caching strategies
+- Add/remove cached assets
 
 ## Testing & Debugging
 
@@ -212,5 +170,10 @@ Test IDs are present on key UI elements (prefixed with `data-testid`) for potent
 - `button-prayer-library`
 - `button-add-divider`
 - `button-toggle-layout`
-- `button-save`
 - `button-print`
+
+## Browser Compatibility
+
+- Modern browsers with ES6+ support
+- Service workers require HTTPS (or localhost for development)
+- Print functionality tested in Chrome, Firefox, Safari

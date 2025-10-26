@@ -1,4 +1,4 @@
-import { type DocumentSection } from "@shared/schema";
+import { type DocumentSection } from "@/types/schema";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";

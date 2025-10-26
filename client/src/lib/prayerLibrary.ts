@@ -61,7 +61,7 @@ Come, let us worship and fall down before Christ Himself, our King and our God.`
     category: "General Prayers",
     tags: ["contemplative", "short", "hesychasm"],
   },
-  
+
   // Evening Prayers
   {
     id: "evening-prayer",
@@ -77,7 +77,7 @@ Come, let us worship and fall down before Christ Himself, our King and our God.`
     category: "Evening Prayers",
     tags: ["daily", "rest"],
   },
-  
+
   // Prayers for Life Events
   {
     id: "find-spouse",
@@ -102,7 +102,7 @@ Christ our God, bless the food and drink of Thy servants, for Thou art holy, alw
     category: "General Prayers",
     tags: ["daily", "meals", "blessing"],
   },
-  
+
   // Prayers to the Theotokos
   {
     id: "theotokos-hymn",
@@ -122,7 +122,7 @@ Beneath thy compassion we take refuge, O Theotokos: do not despise our petitions
     category: "Prayers to the Theotokos",
     tags: ["theotokos", "protection", "intercession"],
   },
-  
+
   // Psalms
   {
     id: "psalm-23",
@@ -186,7 +186,7 @@ Then shall they offer calves upon Your altar.`,
     category: "Psalms",
     tags: ["psalm", "repentance", "forgiveness"],
   },
-  
+
   // Prayers to Saints
   {
     id: "st-nicholas",
@@ -202,7 +202,7 @@ Then shall they offer calves upon Your altar.`,
     category: "Prayers to Saints",
     tags: ["guardian-angel", "protection", "forgiveness"],
   },
-  
+
   // General Prayers
   {
     id: "thanksgiving",
@@ -242,7 +242,7 @@ export function getPrayersByCategory(category: PrayerCategory): Prayer[] {
 // Helper function to search prayers
 export function searchPrayers(query: string): Prayer[] {
   const lowercaseQuery = query.toLowerCase();
-  return prayerLibrary.filter(prayer => 
+  return prayerLibrary.filter(prayer =>
     prayer.title.toLowerCase().includes(lowercaseQuery) ||
     prayer.content.toLowerCase().includes(lowercaseQuery) ||
     prayer.tags.some(tag => tag.toLowerCase().includes(lowercaseQuery))
