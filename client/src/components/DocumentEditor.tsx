@@ -117,63 +117,68 @@ export function DocumentEditor({
             className="text-xl font-serif"
             data-testid="input-document-title"
           />
-          <div className="flex gap-2 flex-wrap">
-            <Button
-              onClick={addSection}
-              variant="default"
-              size="sm"
-              data-testid="button-add-section"
-            >
-              <Plus className="w-4 h-4 mr-2" />
-              Add Section
-            </Button>
-            <Button
-              onClick={() => setPrayerBrowserOpen(true)}
-              variant="default"
-              size="sm"
-              className="bg-primary hover:bg-primary"
-              data-testid="button-prayer-library"
-            >
-              <BookOpen className="w-4 h-4 mr-2" />
-              Prayer Library
-            </Button>
-            <Button
-              onClick={addDivider}
-              variant="outline"
-              size="sm"
-              data-testid="button-add-divider"
-            >
-              <Divide className="w-4 h-4 mr-2" />
-              Add Divider
-            </Button>
-            <div className="flex-1" />
-            <Button
-              onClick={() => onLayoutChange(layout === "single" ? "double" : "single")}
-              variant="outline"
-              size="sm"
-              data-testid="button-toggle-layout"
-            >
-              {layout === "single" ? (
-                <>
-                  <Columns2 className="w-4 h-4 mr-2" />
-                  Double Column
-                </>
-              ) : (
-                <>
-                  <RectangleVertical className="w-4 h-4 mr-2" />
-                  Single Column
-                </>
-              )}
-            </Button>
-            <Button
-              onClick={onPrint}
-              variant="default"
-              size="sm"
-              data-testid="button-print"
-            >
-              <Printer className="w-4 h-4 mr-2" />
-              Print
-            </Button>
+          <div className="space-y-2">
+            {/* Content Creation Buttons */}
+            <div className="flex gap-2 flex-wrap">
+              <Button
+                onClick={() => setPrayerBrowserOpen(true)}
+                variant="default"
+                size="sm"
+                data-testid="button-prayer-library"
+              >
+                <BookOpen className="w-4 h-4 mr-2" />
+                Prayer Library
+              </Button>
+              <Button
+                onClick={addSection}
+                variant="outline"
+                size="sm"
+                data-testid="button-add-section"
+              >
+                <Plus className="w-4 h-4 mr-2" />
+                Add Section
+              </Button>
+              <Button
+                onClick={addDivider}
+                variant="outline"
+                size="sm"
+                data-testid="button-add-divider"
+              >
+                <Divide className="w-4 h-4 mr-2" />
+                Divider
+              </Button>
+            </div>
+
+            {/* Layout and Print Controls */}
+            <div className="flex gap-2 flex-wrap">
+              <Button
+                onClick={() => onLayoutChange(layout === "single" ? "double" : "single")}
+                variant="outline"
+                size="sm"
+                data-testid="button-toggle-layout"
+              >
+                {layout === "single" ? (
+                  <>
+                    <Columns2 className="w-4 h-4 mr-2" />
+                    Double Column
+                  </>
+                ) : (
+                  <>
+                    <RectangleVertical className="w-4 h-4 mr-2" />
+                    Single Column
+                  </>
+                )}
+              </Button>
+              <Button
+                onClick={onPrint}
+                variant="default"
+                size="sm"
+                data-testid="button-print"
+              >
+                <Printer className="w-4 h-4 mr-2" />
+                Print
+              </Button>
+            </div>
           </div>
         </div>
       </Card>

@@ -26,7 +26,7 @@ export default function Home() {
       <div className="flex-1 overflow-hidden print:overflow-visible print:block print:h-auto">
         <ResizablePanelGroup direction="horizontal" className="h-full print:h-auto">
           {/* Editor Panel */}
-          <ResizablePanel defaultSize={50} minSize={30} maxSize={70} className="print:hidden">
+          <ResizablePanel defaultSize={33} minSize={25} maxSize={70} className="print:hidden">
             <DocumentEditor
               title={title}
               layout={layout}
@@ -42,7 +42,7 @@ export default function Home() {
           <ResizableHandle className="print:hidden" withHandle />
 
           {/* Preview Panel */}
-          <ResizablePanel defaultSize={50} minSize={30} maxSize={70} className="print:w-full print:h-auto">
+          <ResizablePanel defaultSize={67} minSize={30} maxSize={75} className="print:w-full print:h-auto">
             <DocumentPreview title={title} layout={layout} sections={sections} />
           </ResizablePanel>
         </ResizablePanelGroup>
