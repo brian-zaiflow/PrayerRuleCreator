@@ -20,8 +20,8 @@ export function DocumentPreview({ title, layout, sections }: DocumentPreviewProp
           data-testid="document-preview"
         >
           {/* Document Header */}
-          <div 
-            className="text-center mb-7 pb-4 border-b border-[#d4af37] print-header"
+          <div
+            className="text-center mb-7 pb-4 border-b border-[#B33434] print-header"
             style={{ pageBreakAfter: 'avoid' }}
           >
             <h1 
@@ -59,14 +59,14 @@ export function DocumentPreview({ title, layout, sections }: DocumentPreviewProp
                   className="section-content"
                 >
                   {section.type === 'divider' ? (
-                    <div 
+                    <div
                       className="text-center mb-5"
                       style={{ marginBottom: '20px' }}
                     >
-                      <span 
+                      <span
                         className="inline-block opacity-60"
-                        style={{ 
-                          color: '#d4af37',
+                        style={{
+                          color: '#d4af37', /* gold accent */
                           fontSize: '12px',
                         }}
                       >
