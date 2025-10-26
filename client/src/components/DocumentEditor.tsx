@@ -1,11 +1,11 @@
 import { useState } from "react";
-import { type DocumentSection, type LayoutType } from "@shared/schema";
-import { type Prayer } from "@shared/prayerLibrary";
+import { type DocumentSection, type LayoutType } from "@/types/schema";
+import { type Prayer } from "@/lib/prayerLibrary";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { SectionEditor } from "./SectionEditor";
 import { PrayerBrowser } from "./PrayerBrowser";
-import { Plus, Divide, Printer, Save, BookOpen, Columns2, RectangleVertical } from "lucide-react";
+import { Plus, Divide, Printer, BookOpen, Columns2, RectangleVertical } from "lucide-react";
 import { Card } from "@/components/ui/card";
 
 interface DocumentEditorProps {
@@ -15,9 +15,7 @@ interface DocumentEditorProps {
   onTitleChange: (title: string) => void;
   onLayoutChange: (layout: LayoutType) => void;
   onSectionsChange: (sections: DocumentSection[]) => void;
-  onSave: () => void;
   onPrint: () => void;
-  isSaving?: boolean;
 }
 
 export function DocumentEditor({
@@ -27,9 +25,7 @@ export function DocumentEditor({
   onTitleChange,
   onLayoutChange,
   onSectionsChange,
-  onSave,
   onPrint,
-  isSaving,
 }: DocumentEditorProps) {
   const [draggedId, setDraggedId] = useState<string | null>(null);
   const [prayerBrowserOpen, setPrayerBrowserOpen] = useState(false);
@@ -170,18 +166,8 @@ export function DocumentEditor({
               )}
             </Button>
             <Button
-              onClick={onSave}
-              variant="default"
-              size="sm"
-              disabled={isSaving}
-              data-testid="button-save"
-            >
-              <Save className="w-4 h-4 mr-2" />
-              {isSaving ? 'Saving...' : 'Save'}
-            </Button>
-            <Button
               onClick={onPrint}
-              variant="outline"
+              variant="default"
               size="sm"
               data-testid="button-print"
             >

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { prayerLibrary, prayerCategories, type Prayer, type PrayerCategory } from "@shared/prayerLibrary";
+import { prayerLibrary, prayerCategories, type Prayer, type PrayerCategory } from "@/lib/prayerLibrary";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";

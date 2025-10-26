@@ -1,4 +1,4 @@
-import { type DocumentSection, type LayoutType } from "@shared/schema";
+import { type DocumentSection, type LayoutType } from "@/types/schema";
 
 interface DocumentPreviewProps {
   title: string;
