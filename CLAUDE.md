@@ -4,9 +4,18 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Orthodox Prayer Rule Creator - A client-only Progressive Web App (PWA) for creating elegantly formatted Orthodox prayer rules and custom prayer books, optimized for printing on letter-size paper. Users can manually add sections, import pre-configured Orthodox prayers from a comprehensive library, and preview documents in real-time before printing.
+Orthodox Prayer Rule Creator - A client-only web application for creating elegantly formatted Orthodox prayer rules and custom prayer books, optimized for printing on letter-size paper. Users can manually add sections, import pre-configured Orthodox prayers from a comprehensive library, and preview documents in real-time before printing.
 
 **This is a static web application** - no backend server, no database, no persistent storage. All data exists only in the current session.
+
+### Text Formatting
+
+Section content supports markdown-like inline formatting:
+- `**bold text**` renders as **bold**
+- `*italic text*` renders as *italic*
+- `{red text}` renders in Byzantine red color (#B33434)
+
+This allows for traditional prayer book typography, such as marking repetitions `{(3 times)}`, rubrics, or name placeholders `*N.*`
 
 ## Development Commands
 
@@ -55,29 +64,28 @@ This is a single-page React application built with Vite:
   - **src/pages/**: Page components (just Home)
   - **src/lib/**: Utilities and prayer library data
   - **src/types/**: TypeScript type definitions
-  - **public/**: Static assets (manifest, favicon)
+  - **public/**: Static assets (favicon)
 
 ### Key Architectural Patterns
 
-1. **Progressive Web App**:
-   - Service worker for offline capability (via vite-plugin-pwa)
-   - Web app manifest for installability
-   - Caches Google Fonts and app assets
-
-2. **No Persistence**:
+1. **No Persistence**:
    - All document state is stored in React component state
    - No localStorage, no database, no server
    - Data is lost on page refresh - this is intentional
    - Users are expected to print or save PDFs of their prayer rules
 
-3. **Type Safety**:
+2. **Type Safety**:
    - Zod schemas in `client/src/types/schema.ts` for runtime validation
    - TypeScript types inferred from Zod schemas
 
-4. **Print Optimization**:
+3. **Print Optimization**:
    - Preview panel shows exactly what will print
    - Custom CSS for print media
    - Letter-size (8.5" × 11") format with proper margins
+
+4. **Text Formatting**:
+   - Markdown-like syntax for inline styling (bold, italic, colored text)
+   - Handled by `StyledText` component in `client/src/components/StyledText.tsx`
 
 ## Data Model
 
@@ -155,12 +163,6 @@ The preview component (`DocumentPreview.tsx`) has special print styles:
 
 ### Adding New Section Types
 The section system is flexible - sections can be either content sections (with title/content) or dividers (decorative separators). To add new section types, update the `sectionTypeSchema` in `client/src/types/schema.ts`.
-
-### PWA Configuration
-To modify PWA settings, edit `vite.config.ts`:
-- Update manifest properties
-- Configure service worker caching strategies
-- Add/remove cached assets
 
 ## Testing & Debugging
 

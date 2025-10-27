@@ -1,4 +1,5 @@
 import { type DocumentSection, type LayoutType } from "@/types/schema";
+import { StyledText } from "./StyledText";
 
 interface DocumentPreviewProps {
   title: string;
@@ -99,7 +100,7 @@ export function DocumentPreview({ title, layout, sections }: DocumentPreviewProp
                           }}
                           data-testid={`preview-section-content-${section.id}`}
                         >
-                          {section.content}
+                          <StyledText content={section.content} />
                         </p>
                       )}
                     </div>
