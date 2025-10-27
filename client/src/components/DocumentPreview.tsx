@@ -76,8 +76,8 @@ export function DocumentPreview({ title, layout, sections }: DocumentPreviewProp
                   ) : (
                     <div className="mb-6">
                       {section.title && (
-                        <h2 
-                          className="font-serif font-medium mb-2"
+                        <h2
+                          className="font-serif font-semibold mb-2"
                           style={{
                             fontSize: '17px',
                             letterSpacing: '0.5px',
@@ -90,11 +90,11 @@ export function DocumentPreview({ title, layout, sections }: DocumentPreviewProp
                         </h2>
                       )}
                       {section.content && (
-                        <p 
+                        <p
                           className="font-sans pl-[18px] leading-relaxed whitespace-pre-wrap"
                           style={{
                             fontSize: '12px',
-                            color: '#4a4a4a',
+                            color: '#2a2a2a',
                             lineHeight: '1.6',
                           }}
                           data-testid={`preview-section-content-${section.id}`}
