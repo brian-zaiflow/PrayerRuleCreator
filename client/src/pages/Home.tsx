@@ -2,12 +2,16 @@ import { useState } from "react";
 import { type DocumentSection, type LayoutType } from "@/types/schema";
 import { DocumentEditor } from "@/components/DocumentEditor";
 import { DocumentPreview } from "@/components/DocumentPreview";
+import { HelpDialog } from "@/components/HelpDialog";
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "@/components/ui/resizable";
+import { Button } from "@/components/ui/button";
+import { HelpCircle } from "lucide-react";
 
 export default function Home() {
   const [title, setTitle] = useState("My Prayer Rule");
   const [layout, setLayout] = useState<LayoutType>("single");
   const [sections, setSections] = useState<DocumentSection[]>([]);
+  const [helpOpen, setHelpOpen] = useState(false);
 
   const handlePrint = () => {
     window.print();
@@ -17,10 +21,24 @@ export default function Home() {
     <div className="h-screen flex flex-col bg-background print:h-auto print:block print:bg-white">
       {/* Top Bar */}
       <header className="border-b bg-card px-6 py-3 print:hidden">
-        <h1 className="text-lg font-serif font-medium text-foreground">
-          Orthodox Prayer Rule Creator
-        </h1>
+        <div className="flex items-center justify-between">
+          <h1 className="text-lg font-serif font-medium text-foreground">
+            Orthodox Prayer Rule Creator
+          </h1>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => setHelpOpen(true)}
+            className="gap-2"
+          >
+            <HelpCircle className="w-4 h-4" />
+            Help
+          </Button>
+        </div>
       </header>
+
+      {/* Help Dialog */}
+      <HelpDialog open={helpOpen} onOpenChange={setHelpOpen} />
 
       {/* Main Content */}
       <div className="flex-1 overflow-hidden print:overflow-visible print:block print:h-auto">

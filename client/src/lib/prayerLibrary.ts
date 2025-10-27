@@ -14,6 +14,7 @@ export const prayerCategories = [
   "Prayers to Saints",
   "Psalms",
   "General Prayers",
+  "Commemorations",
 ] as const;
 
 export type PrayerCategory = typeof prayerCategories[number];
@@ -231,6 +232,44 @@ For Thou only art holy, Thou only art the Lord, O Jesus Christ, to the Glory of 
     content: `O Lord, Who lovest mankind, I pray Thee for those who hate and wrong me. Forgive their sins and my sins also; enlighten them with the light of Thy truth. Visit them with Thy salvation that they may be saved. Make them worthy to partake of Thy eternal blessings, and make me also, though unworthy, a partaker of these blessings. Amen.`,
     category: "General Prayers",
     tags: ["forgiveness", "love", "enemies"],
+  },
+
+  // Commemorations
+  {
+    id: "commemoration-living",
+    title: "For the Living",
+    content: `Save, O Lord, and have mercy upon:
+___
+___
+___
+
+Preserve them through the intercessions of the Theotokos and all the Saints, O Thou Who alone lovest mankind.`,
+    category: "Commemorations",
+    tags: ["commemorations", "living", "intercession"],
+  },
+  {
+    id: "commemoration-departed-orthodox",
+    title: "For the Departed (Orthodox)",
+    content: `Give rest, O Lord, to the souls of Thy departed servants:
+___
+___
+___
+
+Pardon all their transgressions, both voluntary and involuntary, granting them the Kingdom and a portion in Thine eternal good things, and the enjoyment of Thine endless and blessed Life.`,
+    category: "Commemorations",
+    tags: ["commemorations", "departed", "orthodox", "repose"],
+  },
+  {
+    id: "commemoration-departed-all",
+    title: "For the Departed (All Souls)",
+    content: `O God of spirits and of all flesh, Who hast trampled down death and overthrown the Devil, and given life to Thy world: Do Thou, the same Lord, give rest to the souls of Thy departed servants:
+___
+___
+___
+
+In a place of brightness, a place of verdure, a place of repose, whence all sickness, sorrow and sighing have fled away. Pardon every transgression which they have committed, whether by word or deed or thought. For Thou art a good God and lovest mankind; because there is no man who lives yet does not sin, for Thou only art without sin, Thy righteousness is to all eternity, and Thy word is truth.`,
+    category: "Commemorations",
+    tags: ["commemorations", "departed", "all-souls", "repose"],
   },
 ];
 

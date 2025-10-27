@@ -11,6 +11,7 @@ interface StyledTextProps {
  * - **bold** for bold text
  * - *italic* for italic text
  * - {red} for Byzantine red colored text
+ * - ___ for blank lines (e.g., for writing names in commemorations)
  */
 export function StyledText({ content, className = "", style = {} }: StyledTextProps) {
   const parseText = (text: string): React.ReactNode[] => {
@@ -18,9 +19,9 @@ export function StyledText({ content, className = "", style = {} }: StyledTextPr
     let currentIndex = 0;
     let key = 0;
 
-    // Combined regex to match **bold**, *italic*, or {red}
+    // Combined regex to match **bold**, *italic*, {red}, or ___
     // Order matters: match ** before * to avoid conflicts
-    const regex = /(\*\*([^*]+)\*\*|\*([^*]+)\*|\{([^}]+)\})/g;
+    const regex = /(\*\*([^*]+)\*\*|\*([^*]+)\*|\{([^}]+)\}|(_{3,}))/g;
 
     let match: RegExpExecArray | null;
 
@@ -54,6 +55,17 @@ export function StyledText({ content, className = "", style = {} }: StyledTextPr
         parts.push(
           <span key={`red-${key++}`} style={{ color: "#B33434" }}>
             {match[4]}
+          </span>
+        );
+      } else if (match[5]) {
+        // ___ pattern - blank line for names
+        parts.push(
+          <span
+            key={`blank-${key++}`}
+            className="inline-block border-b border-gray-400 min-w-[200px]"
+            style={{ marginBottom: '-2px' }}
+          >
+            &nbsp;
           </span>
         );
       }

@@ -14,8 +14,13 @@ Section content supports markdown-like inline formatting:
 - `**bold text**` renders as **bold**
 - `*italic text*` renders as *italic*
 - `{red text}` renders in Byzantine red color (#B33434)
+- `___` renders as a blank line for handwriting names (useful for commemorations)
 
 This allows for traditional prayer book typography, such as marking repetitions `{(3 times)}`, rubrics, or name placeholders `*N.*`
+
+For commemorations (prayers for the living and departed), users can either:
+- Use `___` syntax to create blank lines for handwriting names after printing
+- Type names directly into the content for a printed list (e.g., "John, Mary, Peter")
 
 ## Development Commands
 
