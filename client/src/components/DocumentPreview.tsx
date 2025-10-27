@@ -9,14 +9,13 @@ interface DocumentPreviewProps {
 
 export function DocumentPreview({ title, layout, sections }: DocumentPreviewProps) {
   return (
-    <div className="w-full h-full overflow-auto bg-background p-8 print:overflow-visible print:p-0 print:bg-white print:h-auto">
-      <div className="mx-auto print:mx-0 print:h-auto">
-        <div 
+    <div className="w-full h-full overflow-auto bg-background p-8 print:overflow-visible print:p-0 print:bg-white print:h-auto preview-wrapper">
+      <div className="mx-auto print:mx-0 print:h-auto preview-inner">
+        <div
           className="bg-white shadow-lg print:shadow-none page-container"
           style={{
             width: '8.5in',
             padding: '0.6in 0.75in',
-            minHeight: '11in',
           }}
           data-testid="document-preview"
         >
@@ -116,8 +115,9 @@ export function DocumentPreview({ title, layout, sections }: DocumentPreviewProp
           @media screen {
             .page-container {
               box-shadow: 0 0 0.5in -0.25in rgba(0,0,0,0.2);
+              min-height: 11in;
             }
-            
+
             /* Column layout styling for preview */
             .print-content {
               width: 100%;
@@ -130,7 +130,16 @@ export function DocumentPreview({ title, layout, sections }: DocumentPreviewProp
               -webkit-print-color-adjust: exact;
               print-color-adjust: exact;
             }
-            
+
+            /* Ensure no gray background in print */
+            .preview-wrapper,
+            .preview-inner {
+              background: white !important;
+              padding: 0 !important;
+              height: auto !important;
+              min-height: 0 !important;
+            }
+
             .page-container {
               box-shadow: none !important;
               min-height: 0 !important;

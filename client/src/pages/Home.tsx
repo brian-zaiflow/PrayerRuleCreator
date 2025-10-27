@@ -14,7 +14,7 @@ export default function Home() {
   };
 
   return (
-    <div className="h-screen flex flex-col bg-background print:h-auto print:block">
+    <div className="h-screen flex flex-col bg-background print:h-auto print:block print:bg-white">
       {/* Top Bar */}
       <header className="border-b bg-card px-6 py-3 print:hidden">
         <h1 className="text-lg font-serif font-medium text-foreground">
